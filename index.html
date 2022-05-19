@@ -14,8 +14,10 @@
         var clientID = "clientID_" + parseInt(Math.random() * 100);
         var test_topic = "test/deepedge";
 
-        function onConnect() {
+        function onConnect(message) {
             console.log("connected");
+
+            document.getElementById("status").innerHTML = "Connected Successfully";
 
             // subcribe to topic
             mqtt.subscribe(test_topic);
@@ -28,9 +30,10 @@
         }
 
         function onFailure(message) {
-            console.log("connecting Attempted " + host + ":" + port + " Failed");
+            var t ="connecting Attempted " + host + ":" + port + " Failed \n"
+            console.log(t);
             console.log(message);
-            // document.getElementById("status").innerHTML = message;
+            document.getElementById("status").innerHTML = t + message.errorMessage;
             // setTimeout(MQTTConnect, reconnectTimeout);
         }
 
@@ -39,12 +42,12 @@
         function onConnectionLost(message) {
             console.log("connection Lost " + host + ":" + port + "Failed");
             console.log(message);
-            // document.getElementById("status").innerHTML = message;
+            document.getElementById("status").innerHTML = message.errorMessage;
         }
 
 
         function onMessageArrived(message) {
-            out_msg = "Message Received " + message.payloadString + "<br>";
+            out_msg = "Message Received " + message.payloadString + " <br> ";
             out_msg = out_msg + "Message Received topic " + message.destinationName;
             console.log(out_msg);
 
@@ -61,6 +64,8 @@
 
         function onConnected(reconn, url) {
             console.log("Connect in " + reconn);
+            document.getElementById("status").innerHTML = reconn;
+
         }
 
         function sub_topics() {
@@ -92,8 +97,6 @@
 
         function MQTTConnect(event) {
 
-            console.log("connecting to " + host + ":" + port);
-
             // Fetch the hostname/IP address and port number from the form
             host = document.getElementById("hostname").value;
             port = Number(document.getElementById("port").value);
@@ -112,6 +115,8 @@
 
             var options = {
                 // useSSL: true,
+                userName: 'deepedge',
+                password:'Deepedge',
                 timeout: 30000,
                 cleanSession: true,
                 onSuccess: onConnect,
@@ -128,8 +133,7 @@
 
 <body>
 
-    <!-- status on application -->
-    <div id="status"></div>
+
 
 
     <form name="creds" action="javascript:MQTTConnect()">
@@ -167,6 +171,10 @@
 
         <input type="submit" value="Subscribe">
     </form>
+
+    <!-- status on application -->
+    <div id="status"></div>
+
 
     <div id="subscribed_data">
         <div>Messgae 1</div>
