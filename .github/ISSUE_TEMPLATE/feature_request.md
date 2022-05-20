@@ -1,12 +1,3 @@
----
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
-
----
-
 name: Tensorflow Issue Template
 description: Use this template to report any issue
 body:
